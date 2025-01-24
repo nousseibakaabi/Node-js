@@ -1,0 +1,48 @@
+<html>
+<header>
+<script src="/socket.io/socket.io.js"></script>
+
+</header>
+<body>
+<label for="">Message</label>
+<input type="text" id="msg" onkeyup="typing()">
+<input type="submit" onclick="send()">
+
+</body>
+<script >
+    const socket = io.connect()
+    
+    name=prompt("User name")
+
+    socket.on("msg",(data) => {
+        p = document.createElement("p");
+        p.innerText = data;
+        document.body.append(p);
+    })
+
+     socket.on("typing",(data) => {
+        p = document.createElement("p");
+        p.innerText = data;
+        document.body.append(p);
+    })
+
+     socket.on("msgName",(data) => {
+        p = document.createElement("p");
+        p.innerText = (data.name+":"+data.msg);
+        document.body.append(p);
+    })
+
+    x=document.getElementById("msg");
+    function send(){
+       // const message = ${name}: ${x.value}; // Concaténer le nom d'utilisateur avec le message
+        socket.emit("msgName",{name:name,msg:x.value});
+    }
+
+    function typing(){
+        socket.emit("typing",name+" is typing...");
+
+    }
+
+</script>
+
+</html>
